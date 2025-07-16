@@ -9,7 +9,6 @@ This repository contains a full-stack infrastructure and deployment setup for a 
 -  **Terraform Infrastructure** for AWS (VPC, EKS, RDS, ALB, S3, SGs)
 -  **Java Health Check App** (Maven project + Dockerfile)
 -  **Kubernetes YAMLs and Helm Chart**
--  **CI/CD pipeline** using GitHub Actions
 -  **Remote state backend** (S3 + DynamoDB locking)
 -  **Documentation and Architecture Diagrams**
 
