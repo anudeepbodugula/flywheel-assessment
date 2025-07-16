@@ -58,12 +58,12 @@ The Helm chart provides a parameterized deployment for the Java app.
 
 > To install with Helm:
 ```bash
-helm install java-app ./java-health-check-app
+helm install java-app ./java-health-app
 ```
 
 > To template YAML locally:
 ```bash
-helm template java-app ./java-health-check-app > output.yaml
+helm template java-app ./java-health-app > output.yaml
 ```
 
 ---
