@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: {{ include "java-health-check-app.fullname" . }}-svc
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: {{ include "java-health-check-app.name" . }}
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: {{ .Values.service.containerPort }}
+  type: ClusterIP
+  

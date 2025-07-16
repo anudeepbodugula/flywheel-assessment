@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "java-health-check-app.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  spec:
+    replicas: {{ .Values.replicaCount }}
+    selector:
+      matchLabels:
+        app: {{ include "java-health-check-app.name" . }}
+      template:
+        metadata:
+          labels:
+            app: {{ include "java-health-check-app.name" . }}
+          spec:
+            containers:
+            - name: java-app
+              image: "{{  .Values.image.repository }}:{{ .Values.image.tag }}"
+              ports:
+              - containerPort: {{ .Values.service.containerPort }}
+              resources:
+                requests:
+                  cpu: {{ .Values.resources.requests.cpu }}
+                  memory: {{ .Values.resources.requests.memory }}
+                limits:
+                  cpu: {{ .Values.resources.limits.cpu }}
+                  memory: {{ .Values.resources.limits.memory }}
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 1000
+                allowPrivilegeEscalation: false
+              env:
+              - name: DB_HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: db-secret
+                    key: db_host
+              - name: DB_PORT
+                valueFrom:
+                  secretKeyRef:
+                    name: db-secret
+                    key: db_port
+              - name: DB_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: db-secret
+                    key: db_user
+              - name: DB_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: db-secret
+                    key: db_password
+              readinessProbe:
+                httpGet:
+                  path: {{ .Values.livenessProbe.path }}
+                  port: {{ .Values.livenessProbe.port }}
+                initialDelaySeconds: 10
+                periodSeconds: 5
+              livenessProbe:
+                httpGet:
+                  path: {{ .Values.livenessProbe.path }}
+                  port: {{ .Values.livenessProbe.port }}
+                initialDelaySeconds: 10
+                periodSeconds: 5
+            imagePullSecrets:
+            - name: {{ .Values.image.pullsecret }}
+---

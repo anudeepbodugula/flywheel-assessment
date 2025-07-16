@@ -1,0 +1,5 @@
+apiVersion: v2
+name: java-health-check-app
+description: A Helm chart for deploying a Java health check application
+version: 0.1.0
+appVersion: "1.0"

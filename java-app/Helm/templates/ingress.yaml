@@ -1,0 +1,23 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "java-health-check-app.fullname" . }}-ingress
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "alb.ingress.kubernetes.io/scheme": "{{ .Values.ingress.scheme }}"
+    "alb.ingress.kubernetes.io/target-type": "{{ .Values.ingress.targetType }}"
+    "alb.ingress.kubernetes.io/listen-ports": '{{ .Values.ingress.listenPorts }}'
+    "kubernetes.io/ingress.class": "{{ .Values.ingress.class }}"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: {{ .Values.ingress.path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "java-health-check-app.fullname" . }}-svc
+                port:
+                  number: {{ .Values.service.port }}
+{{- end }}
